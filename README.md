@@ -61,3 +61,25 @@ add this:
 					"NODE_ENV": "development"
 				}
 			}
+
+
+get typescript working on electron side
+^ require -> import { app, BrowserWindow } from 'electron'
+^ src/main/main.js to main.ts
+
+-- create separate ts config for electron "tsconfig.electron.json"
+-- use different include directories, ignore renderer side
+,
+    "outDir": "./dist"
+  },
+  "include": [
+    "src/main/*.ts",
+  ],
+-- set an outdir
+
+-- add compile step prior to run, using second config
+"scripts": {
+    "start": "tsc -p tsconfig.electron.json && electron .",
+
+-- in tsconfig set module type to commonjs to allow import statements at main.js
+"module": "commonjs",

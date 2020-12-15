@@ -2,9 +2,9 @@
   "name": "electrontest",
   "version": "0.1.0",
   "private": true,
-  "main": "src/main/main.js",
+  "main": "dist/main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "tsc -p tsconfig.electron.json && electron .",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
