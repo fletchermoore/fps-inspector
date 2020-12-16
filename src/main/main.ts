@@ -18,7 +18,6 @@ function createWindow() {
         win.webContents.openDevTools();
         // const ses = win.webContents.session;
         // ses.loadExtension('%LOCALAPPDATA%\Google\Chrome\User Data\Default\Extensions\nhdogjmejiglipccpnnnanhbledajbpd');
-
     }
     else {
         console.log("production mode");

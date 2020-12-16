@@ -53,7 +53,7 @@ add env variable: const isDev = process.env.NODE_ENV === "development";
         win.loadFile('public/index.html');
     }
 
-add env to vscode task 
+add env to vscode task  or launch or some other way
 terminal -> configure tasks (npm: start)
 add this:
 			"options": {
@@ -83,3 +83,46 @@ get typescript working on electron side
 
 -- in tsconfig set module type to commonjs to allow import statements at main.js
 "module": "commonjs",
+
+
+-- configure vscode launch
+-- needs outFiles specified for sourceMaps to work
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Main Process",
+            "type": "node",
+            "request": "launch",
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "program": "${workspaceFolder}\\dist\\main.js",
+            "windows": {
+                "runtimeExecutable": "${workspaceRoot}\\node_modules\\.bin\\electron.cmd"
+            },
+            "args": [
+                "."
+            ],
+            "outputCapture": "std",
+            "preLaunchTask": "npm: build-electron",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}\\dist\\**"
+            ]
+        }
+    ]
+-- above launch depends on prelaunch task
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "build-electron",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: build-electron",
+			"detail": "tsc -p tsconfig.electron.json"
+		}
+	]
+}
+-- not sure why debugger seems to run 2x but it works

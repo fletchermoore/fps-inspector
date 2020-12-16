@@ -5,6 +5,7 @@
   "main": "dist/main.js",
   "scripts": {
     "start": "tsc -p tsconfig.electron.json && electron .",
+    "build-electron": "tsc -p tsconfig.electron.json",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
