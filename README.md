@@ -28,6 +28,15 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 install vue-cli
 
+## add veutify
+
+`vue add vuetify`
+
+^ src/plugins/veutify.ts -> import Vuetify from "vuetify/lib";
+// for some reason the default veutify/lib/framework is wrong
+
+must do this before next step or coding because default config will overwrite your application
+
 move src to src/renderer
 rename main.ts to renderer.ts
 
@@ -126,3 +135,4 @@ get typescript working on electron side
 	]
 }
 -- not sure why debugger seems to run 2x but it works
+
