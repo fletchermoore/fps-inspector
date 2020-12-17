@@ -1,44 +1,33 @@
-# electrontest
-
-## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# FPS Inspector
 
 
-### steps
+## Working in dev mode
+
+1st. yarn serve
+2nd. yarn start
+
+
+## For reference, steps to make vue-veutify-typescript-secure-electron application
 
 install vue-cli
 
-## add veutify
+### add veutify
 
 `vue add vuetify`
 
 ^ src/plugins/veutify.ts -> import Vuetify from "vuetify/lib";
 // for some reason the default veutify/lib/framework is wrong
 
-must do this before next step or coding because default config will overwrite your application
+***must add this before next steps or coding because vue cli will write files in the wrong directories and overwrite your config
 
+After this point, our directory structure will be differnt from what vue cli expect, so use it with caution.
+
+
+### update dir structure to make electron app
 move src to src/renderer
 rename main.ts to renderer.ts
+
+*** at this point, do not use vue cli again, which makes incorrect assumptions about your application structure
 
 yarn add electron -D
 
@@ -72,7 +61,7 @@ add this:
 			}
 
 
-get typescript working on electron side
+### get typescript working on electron side
 ^ require -> import { app, BrowserWindow } from 'electron'
 ^ src/main/main.js to main.ts
 
@@ -94,7 +83,7 @@ get typescript working on electron side
 "module": "commonjs",
 
 
--- configure vscode launch
+### configure vscode launch
 -- needs outFiles specified for sourceMaps to work
     "version": "0.2.0",
     "configurations": [
