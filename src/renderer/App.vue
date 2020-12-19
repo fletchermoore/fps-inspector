@@ -1,57 +1,143 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
+    <v-app-bar app color="primary" dark fixed>
+      <v-toolbar-title>FPS Inspector</v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-btn v-on:click="test" text>Debug</v-btn>
     </v-app-bar>
-
     <v-main>
-      <HelloWorld />
+      <v-stepper v-model="e1" non-linear class="fill-height">
+        <v-stepper-header>
+          <v-stepper-step :complete="e1 > 1" step="1" editable>
+            Extract
+          </v-stepper-step>
+
+          <v-divider></v-divider>
+
+          <v-stepper-step :complete="e1 > 2" step="2" editable>
+            Process
+          </v-stepper-step>
+
+          <v-divider></v-divider>
+
+          <v-stepper-step step="3" editable>
+            Verify
+          </v-stepper-step>
+        </v-stepper-header>
+
+        <v-stepper-items class="fill-height">
+          <v-stepper-content step="1" class="fill-height">
+            <v-card class="mb-12 fill-height" flat>
+              <p>
+                <b>Selected file:</b> <span>{{ selectedFile }}</span>
+              </p>
+              <p>
+                Use the open button in the top right to select an MP4 video.
+              </p>
+            </v-card>
+
+            <v-btn v-on:click="selectFile" color="primary">Open</v-btn>
+
+            <!--
+        <v-btn
+          color="primary"
+          @click="e1 = 2"
+        >
+          Continue
+        </v-btn> 
+        -->
+          </v-stepper-content>
+
+          <v-stepper-content step="2" class="fill-height">
+            <v-card class="mb-12 fill-height" flat>
+              <image-viewer />
+            </v-card>
+
+            <v-btn color="primary" @click="e1 = 3">
+              Continue
+            </v-btn>
+          </v-stepper-content>
+
+          <v-stepper-content step="3">
+            <v-card class="mb-12 fill-height" flat>
+              <ocr-results-view />
+            </v-card>
+          </v-stepper-content>
+        </v-stepper-items>
+      </v-stepper>
+
+      <!--  -->
+      <!--  -->
     </v-main>
+    <v-footer fixed>
+      <status-label />
+      <v-spacer></v-spacer>
+      <v-progress-circular
+        v-show="loading"
+        indeterminate
+        size="20"
+      ></v-progress-circular>
+    </v-footer>
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+import { Component } from "vue-property-decorator";
+import StatusLabel from "./components/StatusLabel.vue";
+import ImageViewer from "./components/ImageViewer.vue";
+import OCRResultsView from "./components/OCRResultsView.vue";
+import { TaskState } from "../common/constants";
 
-export default Vue.extend({
-  name: "App",
 
+@Component({
   components: {
-    HelloWorld
-  },
+    StatusLabel,
+    "ocr-results-view": OCRResultsView,
+    ImageViewer
+  }
+})
+export default class App extends Vue {
+  selectedFile = "None";
+  loading = false;
+  e1 = 1;
 
-  data: () => ({
-    //
-  })
-});
+  mounted() {
+    window.app.on("file-selected", (fileName: string) => {
+      this.selectedFile = fileName;
+      window.app.retrieveResults();
+      this.e1 = 2;
+    });
+
+    window.app.on("alert", (message: string) => {
+      alert(message);
+    });
+
+    window.app.on("extract-status-updated", (status: string) => {
+      console.log("extract status updated:", status);
+    });
+
+    console.log(TaskState.Finished);
+  }
+
+  selectFile() {
+    window.app.selectFile();
+    // start loading
+    this.loading = true;
+    setTimeout(() => {
+      this.loading = false;
+    }, 2000);
+  }
+  test() {
+    window.app.test();
+  }
+}
+
+// components: {
+//     'status-label': StatusLabel,
+//     'image-viewer': ImageViewer,
+//     'ocr-results-view': OCRResultsView
+
+// },
 </script>

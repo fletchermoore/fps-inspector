@@ -9,10 +9,13 @@
     "build-electron": "tsc -p tsconfig.electron.json",
     "start": "tsc -p tsconfig.electron.json && electron ."
   },
-  "main": "dist/main.js",
+  "main": "dist/main/main.js",
   "dependencies": {
     "@mdi/font": "^3.6.95",
+    "csv-parser": "^3.0.0",
+    "jimp": "^0.16.1",
     "roboto-fontface": "*",
+    "rxjs": "^6.6.3",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^8.4.2",

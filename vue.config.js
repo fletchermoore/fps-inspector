@@ -2,8 +2,8 @@ module.exports = {
   transpileDependencies: ["vuetify"],
   chainWebpack: config => {
     config
-      .entry('app')
+      .entry("app")
       .clear()
-      .add('./src/renderer/renderer.ts')
+      .add("./src/renderer/renderer.ts");
   }
 };

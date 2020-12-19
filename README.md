@@ -40,7 +40,7 @@ add env variable: const isDev = process.env.NODE_ENV === "development";
     if (isDev) {
         // hot reloading and other goodness
         console.log("dev is happening!");
-        win.loadURL("http://localhost:8081");
+        win.loadURL("http://localhost:8080");
         win.webContents.openDevTools();
         // const ses = mainWindow.webContents.session;
         // ses.loadExtension('%LOCALAPPDATA%\Google\Chrome\User Data\Default\Extensions\nhdogjmejiglipccpnnnanhbledajbpd');
@@ -94,7 +94,7 @@ add this:
             "env": {
                 "NODE_ENV": "development"
             },
-            "program": "${workspaceFolder}\\dist\\main.js",
+            "program": "${workspaceFolder}\\dist\\main\\main.js",
             "windows": {
                 "runtimeExecutable": "${workspaceRoot}\\node_modules\\.bin\\electron.cmd"
             },
