@@ -53,10 +53,6 @@
             <v-card class="mb-12 fill-height" flat>
               <image-viewer />
             </v-card>
-
-            <v-btn color="primary" @click="e1 = 3">
-              Continue
-            </v-btn>
           </v-stepper-content>
 
           <v-stepper-content step="3">
@@ -90,7 +86,6 @@ import ImageViewer from "./components/ImageViewer.vue";
 import OCRResultsView from "./components/OCRResultsView.vue";
 import { TaskState } from "../common/constants";
 
-
 @Component({
   components: {
     StatusLabel,
@@ -108,6 +103,11 @@ export default class App extends Vue {
       this.selectedFile = fileName;
       window.app.retrieveResults();
       this.e1 = 2;
+    });
+
+    window.app.on("processing-finished", (dummy: any) => {
+      console.log("process finished");
+      //this.e1 = 3;
     });
 
     window.app.on("alert", (message: string) => {
@@ -129,6 +129,7 @@ export default class App extends Vue {
       this.loading = false;
     }, 2000);
   }
+
   test() {
     window.app.test();
   }

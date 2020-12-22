@@ -15,7 +15,7 @@ Part of a research project in progress. Not suitable for production.
 2.  then yarn start
 
 
-## For reference, steps to make vue-veutify-typescript-secure-electron application
+## For reference, steps to create a generic vue-veutify-typescript-electron application
 
 Had a difficult time getting everything working, so below is included for reference for future projects. May not be the cleanest way to accomplish this setup.
 
@@ -29,12 +29,12 @@ For my original electron project I tried building it from the ground up starting
 ### add veutify
 
 1. `vue add vuetify`
-2. ^ src/plugins/veutify.ts -> `import Vuetify from "vuetify/lib";`
+2. change src/plugins/veutify.ts -> `import Vuetify from "vuetify/lib";`
 // for some reason the default veutify/lib/framework is wrong
 
-**must add this before next steps or coding because vue cli will write files in the wrong directories and overwrite your config**
+**must add vuetify before next steps or coding because vue cli will write files in the wrong directories and overwrite your config**
 
-After this point, our directory structure will be differnt from what vue cli expect, so use it with caution.
+After this point, our directory structure will be different from what vue cli expects, so use it with caution.
 
 
 ### electron
@@ -42,7 +42,7 @@ After this point, our directory structure will be differnt from what vue cli exp
 1. update dir structure to make electron app:
    1. move src/* to src/renderer/*
    2. rename main.ts to renderer.ts
-   3. update vue.config.js to reflect new entry point (reference webpack chain config project)
+   3. update vue.config.js to reflect new entry point (reference chain webpack project)
 
             module.exports = {
                 transpileDependencies: ["vuetify"],
@@ -58,9 +58,9 @@ After this point, our directory structure will be differnt from what vue cli exp
 
 1. `yarn add electron -D`
 2. create src/main/main.js from electron sample
-3. add main to package
-4. add start script to package
-5. add env variable: const isDev = process.env.NODE_ENV === "development";
+3. add main to package (per electron docs, eg: `"main": "dist/main/main.js",`)
+4. add start script to package (eg `"start": "electron ."` )
+5. add env variable: `const isDev = process.env.NODE_ENV === "development";`
 
         if (isDev) {
             // hot reloading and other goodness
@@ -89,10 +89,10 @@ After this point, our directory structure will be differnt from what vue cli exp
 
 ### get typescript working on electron side
 
-1. ^ require statement -> `import { app, BrowserWindow } from 'electron'`
-2. ^ src/main/main.js to main.ts
+1. change require statement -> `import { app, BrowserWindow } from 'electron'`
+2. change src/main/main.js to main.ts
 3. create separate ts config for electron "tsconfig.electron.json"
-3. use different include directories, ignore renderer side
+3. use different include directories, ignore renderer side which is handled by webpack
 
         ,
             "outDir": "./dist"
@@ -143,19 +143,19 @@ After this point, our directory structure will be differnt from what vue cli exp
 
 -- above launch depends on prelaunch task
 
-{
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "npm",
-			"script": "build-electron",
-			"group": "build",
-			"problemMatcher": [],
-			"label": "npm: build-electron",
-			"detail": "tsc -p tsconfig.electron.json"
-		}
-	]
-}
+    {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "type": "npm",
+                "script": "build-electron",
+                "group": "build",
+                "problemMatcher": [],
+                "label": "npm: build-electron",
+                "detail": "tsc -p tsconfig.electron.json"
+            }
+        ]
+    }
 
 -- not sure why debugger seems to run 2x but it works
 

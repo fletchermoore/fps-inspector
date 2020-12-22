@@ -26,4 +26,9 @@ export declare global {
     IMAGE: string;
     COMMENT: string;
   }
+
+  interface ProgressState {
+    progressCount: number;
+    totalCount: number;
+  }
 }

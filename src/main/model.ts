@@ -2,6 +2,7 @@ import path from "path";
 import { BehaviorSubject } from "rxjs";
 import fs from "fs";
 import * as constants from "./constants";
+import { Task } from "./tasks/task";
 
 export default class Model {
   private _videoPath = "";
@@ -10,6 +11,8 @@ export default class Model {
   private currentFileBaseName = "";
   private currentImagePath = "";
   private data: Array<DataPoint> = [];
+
+  activeTask?: Task;
 
   fileNameSubject = new BehaviorSubject("");
   statusSubject = new BehaviorSubject("Idle");

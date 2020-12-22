@@ -1,5 +1,5 @@
 import { BehaviorSubject } from "rxjs";
-import { TaskState } from "../common/constants";
+import { TaskState } from "../../common/constants";
 //import { BehaviorSubject } from 'rxjs';
 
 export interface Task {

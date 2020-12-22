@@ -6,3 +6,9 @@ export enum TaskState {
   Canceled = "canceled",
   Failed = "failed"
 }
+
+export enum Message {
+  ProcessStatusUpdated = "process-status-updated",
+  ProcessProgressUpdated = "process-progress-updated",
+  Cancel = "cancel"
+}

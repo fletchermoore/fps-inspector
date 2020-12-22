@@ -3,8 +3,9 @@ import Model from "./model";
 
 import { ipcMain, dialog } from "electron";
 
-import { ExtractTask } from "./extract_task";
-import { TaskState } from "../common/constants";
+import { ExtractTask } from "./tasks/extract_task";
+import { ProcessTask } from "./tasks/process_task";
+import { TaskState, Message } from "../common/constants";
 import { Tesseract } from "./tesseract";
 import path from "path";
 import fs from "fs";
@@ -55,22 +56,18 @@ export class Controller {
 
   // run tesseract over all the extracted images
   processImages = async () => {
-    try {
-      const matchingFiles = files.matching(
-        this.model.outputDir(),
-        this.model.imageNamePattern()
-      );
-      console.log("process found # matches: ", matchingFiles.length);
-      for (let i = 0; i < matchingFiles.length; i++) {
-        const fullPath = matchingFiles[i];
-        console.log("processing " + fullPath);
-        const tesseract = new Tesseract(fullPath);
-        await tesseract.process();
-        console.log("successfullly processed " + fullPath);
-      }
-    } catch (err) {
-      this.updateStatus(err);
-    }
+    const processTask = new ProcessTask(
+      this.model.outputDir(),
+      this.model.imageNamePattern()
+    );
+    processTask.status.subscribe((status: TaskState) => {
+      this.notifyView(Message.ProcessStatusUpdated, status);
+    });
+    processTask.progress.subscribe((status: ProgressState) => {
+      this.notifyView(Message.ProcessProgressUpdated, status);
+    });
+    this.model.activeTask = processTask;
+    processTask.start();
   };
 
   writeDataFile = (data: Array<DataPoint>) => {
@@ -144,6 +141,11 @@ export class Controller {
   createDataFile = () => {
     this.readData();
     this.writeDataFile(this.model.getData());
+  };
+
+  startProcessing = () => {
+    this.processImages();
+    //this.notifyView("processing-finished", []);
   };
 
   // = () => is different from a regular function declaration
@@ -220,6 +222,10 @@ export class Controller {
     // console.log(this.model.getData());
   };
 
+  cancel = () => {
+    this.model.activeTask?.cancel();
+  };
+
   setupIpc() {
     const onOpenFile = this.onOpenFile;
     ipcMain.on("select-file", function(event: any) {
@@ -242,6 +248,16 @@ export class Controller {
       results: Array<ResultUpdate>
     ) {
       onUpdateResults(results);
+    });
+
+    const startProcessing = this.startProcessing;
+    ipcMain.on("start-processing", function(event: any) {
+      startProcessing();
+    });
+
+    const cancel = this.cancel;
+    ipcMain.on(Message.Cancel, function(event: any) {
+      cancel();
     });
   }
 }

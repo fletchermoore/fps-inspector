@@ -1,7 +1,7 @@
 import util from "util";
 import path from "path";
 import { Task } from "./task";
-import { TaskState } from "../common/constants";
+import { TaskState } from "../../common/constants";
 const fs = require("fs").promises;
 
 import cp from "child_process"; //util.promisify(require('child_process').spawn);

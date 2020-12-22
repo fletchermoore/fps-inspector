@@ -4,7 +4,7 @@
 
 // my own custom NODE_MODULES are not allowed due to sandbox
 
-const { contextBridge, ipcRenderer } = require("electron");
+import { contextBridge, ipcRenderer } from "electron";
 
 // allowing any channel to be used is not safe because
 // ipcRenderer can send to some electron native channels
@@ -14,7 +14,10 @@ const channelWhiteList = [
   "image-set",
   "results-retrieved",
   "alert",
-  "extract-status-updated"
+  "extract-status-updated",
+  "processing-finished",
+  "process-status-updated",
+  "process-progress-updated"
 ];
 
 contextBridge.exposeInMainWorld("app", {
@@ -24,6 +27,14 @@ contextBridge.exposeInMainWorld("app", {
 
   test: () => {
     ipcRenderer.send("test");
+  },
+
+  cancel: () => {
+    ipcRenderer.send("cancel");
+  },
+
+  startProcessing: () => {
+    ipcRenderer.send("start-processing");
   },
 
   retrieveResults: () => {
