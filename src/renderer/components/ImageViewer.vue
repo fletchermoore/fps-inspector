@@ -30,7 +30,7 @@
       >
     </span>
     <span v-show="isFinished">
-      <v-btn color="primary">Continue</v-btn></span>
+      <v-btn color="primary" @click="alert('not implemented')">Continue</v-btn></span>
     </div>
 
   </div>
