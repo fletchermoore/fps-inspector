@@ -1,6 +1,7 @@
 import util from "util";
 import path from "path";
-//const fs = require('fs').promises;
+import fs from 'fs';
+//const fs = require('fs');
 const exec = util.promisify(require("child_process").exec);
 import jimp from "jimp";
 import * as constants from "./constants";
@@ -38,7 +39,7 @@ export class Tesseract {
     try {
       await jimp.read(this.filepath).then((img: any) => {
         img
-          .crop(75, 34, 330, 138)
+          .crop(1091, 34, 95, 29)
           .greyscale()
           .invert()
           .writeAsync(this.preprocessedImagePath);
@@ -66,10 +67,13 @@ export class Tesseract {
 
     try {
       const { stdout, stderr } = await exec(tessCommand);
-      console.log("stdout:", stdout);
-      console.error("stderr:", stderr);
+      // console.log("stdout:", stdout);
+      // console.error("stderr:", stderr);
     } catch (error) {
-      console.log(error);
+      var errorStream = fs.createWriteStream(path.join(this.outDir, 'tess.error.log'), 
+        { flags: 'a' });
+      //console.log(error);
+      error.message.pipe(errorStream);
       throw Error("Failed to interpret");
     }
   }
